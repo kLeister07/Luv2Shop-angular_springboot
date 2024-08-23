@@ -740,6 +740,10 @@ table.table.table-bordered th {
 .detail-section {
   margin-top: 60px;
 }
+
+.detail-img {
+  width: 30%;
+}
 /**/
 
 /*
@@ -767,6 +771,7 @@ a.primary-btn:hover {
   background: #0da8e4;
   color: #fff;
 }
+/* btn btn-primary used instead, better looking */
 
 .active-link {
   font-weight: bold;
