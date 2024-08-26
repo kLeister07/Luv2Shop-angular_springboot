@@ -10,6 +10,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import {
   provideHttpClient,
   withInterceptorsFromDi,
+  withFetch,
 } from '@angular/common/http';
 import { ProductService } from './services/product.service';
 import { Routes, RouterModule } from '@angular/router';
@@ -17,6 +18,8 @@ import { ProductCategoryMenuComponent } from './components/product-category-menu
 import { SearchComponent } from './components/search/search.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import '@angular/localize/init';
+
 
 const routes: Routes = [
   { path: 'products/:id', component: ProductDetailsComponent },
@@ -46,7 +49,7 @@ const routes: Routes = [
   providers: [
     provideClientHydration(),
     ProductService,
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
   ],
 })
 export class AppModule {}
