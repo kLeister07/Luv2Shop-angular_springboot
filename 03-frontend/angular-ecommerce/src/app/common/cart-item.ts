@@ -1,14 +1,34 @@
 import { Product } from './product';
 
 export class CartItem {
-
-    constructor(public id: string,
-                public name:string,
-                public imageUrl: string,
-                public unitPrice: number,
-                public quantity: number = 1) {
+  public id: number;
+  public name:string;
+  public imageUrl: string;
+  public unitPrice: number;
+  public quantity: number
+  
+    constructor(product: Product) {
+        this.id = product.id!;
+        this.name = product.name!;
+        this.imageUrl = product.imageUrl!;
+        this.unitPrice = product.unitPrice!;
+        this.quantity = 1;
     }
 }
+
+// import { Product } from './product';
+
+// export class CartItem {
+
+//     constructor(public id: number,
+//                 public name:string,
+//                 public imageUrl: string,
+//                 public unitPrice: number,
+//                 public quantity: number = 1) {
+//     }
+// }
+
+
 // export class CartItem {
 //   id: string;
 //   name: string;
