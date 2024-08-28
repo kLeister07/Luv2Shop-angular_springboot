@@ -712,6 +712,7 @@ table.table.table-bordered th {
   color: #fff;
   font-size: 14px;
   padding: 7px;
+  border: 1px solid #dee2e6;
 }
 .table-responsive {
   padding-right: 1px;
