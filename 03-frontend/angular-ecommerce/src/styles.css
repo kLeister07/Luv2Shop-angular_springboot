@@ -765,6 +765,18 @@ table.table.table-bordered th {
   color: #0056b3; /* Color on hover */
 }
 
+/* Style for the clickable alert */
+.clickable-alert {
+  cursor: pointer; /* Makes the cursor a pointer to indicate it's clickable */
+  text-align: left; /* Centers text horizontally */
+  padding: 10px; /* Adds some padding */
+  border-radius: 4px; /* Rounds the corners */
+}
+
+.clickable-alert:hover {
+  background-color: #f5c6cb; /* Slightly darker background on hover */
+}
+
 /*
 * ----------------------------
 * Product Details
