@@ -727,6 +727,44 @@ table.table.table-bordered th {
   margin-left: 5px;
 }
 
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  bottom: 0%; /* Position above the image */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0da8e4;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.product-link {
+  color:  #0da8e4; /* Link color */
+  text-decoration: none;
+  font-size: 16px; /* Adjust font size as needed */
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.product-link:hover {
+  color: #0056b3; /* Color on hover */
+}
+
 /*
 * ----------------------------
 * Product Details
