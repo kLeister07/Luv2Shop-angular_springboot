@@ -35,6 +35,7 @@
             <td>
               <div class="items">
                 <label>Quantity:</label>
+                <hr>
                 <div class="row no-gutters">
                   <div class="col">
                     <button (click)="incrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
@@ -52,6 +53,15 @@
                   <div class="col-8"></div>
                 </div>
               </div>
+<div>
+
+  <button
+  (click)="remove(tempCartItem)"
+  class="btn btn-primary btn-sm mt-2"
+  >Remove
+</button>
+</div>
+
               <p class="mt-2">
                 Subtotal:
                 {{
