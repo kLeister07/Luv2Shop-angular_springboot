@@ -35,7 +35,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <!-- shipping address form group -->
@@ -93,21 +92,21 @@
           </div>
         </div>
 
-
-
-
         <!-- billing address form group -->
         <div formGroupName="billingAddress" class="form-area">
           <h3>Billing Address</h3>
 
           <!-- add checkbox to copy shipping to billing -->
-              <div class="input-space">
-                <label class="au-checkbox">
-                  <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">
-                  <span class="au-checkmark"></span>
-                  Billing Address same as Shipping Address
-                </label>
-              </div>
+          <div class="input-space">
+            <label class="au-checkbox">
+              <input
+                type="checkbox"
+                (change)="copyShippingAddressToBillingAddress($event)"
+              />
+              <span class="au-checkmark"></span>
+              Billing Address same as Shipping Address
+            </label>
+          </div>
 
           <!-- street -->
           <div class="row">
@@ -219,8 +218,7 @@
           <div class="row">
             <div class="col-md-2"><label>Security Code</label></div>
             <div class="col-md-9">
-              <div class="input-space
-              ">
+              <div class="input-space">
                 <input formControlName="securityCode" type="text" />
               </div>
             </div>
@@ -228,19 +226,17 @@
         </div>
 
         <!-- Order details -->
-          <div class="form-area">
-            <h3>Review Your Order</h3>
-            <p>Total Quantity: {{totalQuantity}}</p>
-            <p>Shipping: FREE</p>
-            <p>Total Price: {{totalPrice | currency: 'USD'}}</p>
-          </div>
+        <div class="form-area">
+          <h3>Review Your Order</h3>
+          <p>Total Quantity: {{ totalQuantity }}</p>
+          <p>Shipping: FREE</p>
+          <p>Total Price: {{ totalPrice | currency : "USD" }}</p>
+        </div>
 
         <!-- submit button -->
-           <div class="text-center">
-             <button class="btn btn-info" type="submit">Place Order</button>
-            </div>
-
-
+        <div class="text-center">
+          <button class="btn btn-info" type="submit">Place Order</button>
+        </div>
       </form>
     </div>
   </div>

@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Luv2ShopFormService {
-
-  constructor() { }
+  constructor() {}
 
   getCreditCardMonths(startMonth: number): Observable<number[]> {
-
     let data: number[] = [];
 
     // build an array for "Month" dropdown list
@@ -35,5 +33,4 @@ export class Luv2ShopFormService {
 
     return of(data);
   }
-
 }
