@@ -8,6 +8,7 @@ import { Luv2ShopFormService } from '../../services/luv2-shop-form.service';
   styleUrl: './checkout.component.css',
 })
 export class CheckoutComponent implements OnInit {
+
   checkoutFormGroup!: FormGroup;
   totalPrice: number = 0;
   totalQuantity: number = 0;
@@ -87,6 +88,27 @@ export class CheckoutComponent implements OnInit {
     console.log(
       'The shipping address is ' +
         this.checkoutFormGroup.get('shippingAddress')?.value
+    );
+  }
+
+  handleMonthsAndYears() {
+    const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
+
+    const currentYear: number = new Date().getFullYear();
+    const selectedYear: number = Number(creditCardFormGroup?.value.expirationYear);
+
+    // if the current year equals the selected year, then start with the current month
+    let startMonth: number;
+    if (currentYear === selectedYear) {
+      startMonth = new Date().getMonth() + 1;
+    } else {
+      startMonth = 1;
+    }
+    this.luv2ShopFormService.getCreditCardMonths(startMonth).subscribe(
+      data => {
+        console.log('Retrieved credit card months: ' + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
     );
   }
 }
