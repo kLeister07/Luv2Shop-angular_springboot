@@ -77,19 +77,19 @@ export class CheckoutComponent implements OnInit {
     console.log('startMonth: ' + startMonth);
     this.luv2ShopFormService
       .getCreditCardMonths(startMonth)
-      .subscribe((data) => {
+      .subscribe((data: any) => {
         console.log('Credit card months: ' + JSON.stringify(data));
         this.creditCardMonths = data;
       });
 
     // populate credit card years
-    this.luv2ShopFormService.getCreditCardYears().subscribe((data) => {
+    this.luv2ShopFormService.getCreditCardYears().subscribe((data: any) => {
       console.log('Retrieved credit card years: ' + JSON.stringify(data));
       this.creditCardYears = data;
     });
 
     // populate countries
-    this.luv2ShopFormService.getCountries().subscribe((data) => {
+    this.luv2ShopFormService.getCountries().subscribe((data: any) => {
       console.log('Retrieved countries: ' + JSON.stringify(data));
       this.countries = data;
     });
@@ -123,6 +123,11 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit() {
     console.log('Handling the submit button');
+
+if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
+    }
+
     console.log(this.checkoutFormGroup.get('customer')?.value);
     console.log(
       'The email address is ' +
@@ -159,7 +164,7 @@ export class CheckoutComponent implements OnInit {
 
     this.luv2ShopFormService
       .getCreditCardMonths(startMonth)
-      .subscribe((data) => {
+      .subscribe((data: number[]) => {
         console.log('Retrieved credit card months: ' + JSON.stringify(data));
         this.creditCardMonths = data;
       });
@@ -174,7 +179,7 @@ export class CheckoutComponent implements OnInit {
     console.log(
       `formGroupName=${formGroupName}, countryCode=${countryCode}, countryName=${countryName}`
     );
-    this.luv2ShopFormService.getStates(countryCode).subscribe((data) => {
+    this.luv2ShopFormService.getStates(countryCode).subscribe((data: any[]) => {
       if (formGroupName === 'shippingAddress') {
         this.shippingAddressStates = data;
       } else {
