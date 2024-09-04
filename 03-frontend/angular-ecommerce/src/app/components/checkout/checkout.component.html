@@ -12,6 +12,25 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="firstName" type="text" />
+                <div
+                  *ngIf="
+                    firstName?.invalid &&
+                    (firstName?.dirty || firstName?.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div>
+                    <div *ngIf="firstName?.errors?.['required']">
+                      First Name is required
+                    </div>
+                    <div *ngIf="firstName?.errors?.['pattern']">
+                      First Name must contain only letters
+                    </div>
+                    <div *ngIf="firstName?.errors?.['minlength']">
+                      First Name must be at least 2 characters long
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -127,7 +146,10 @@
             <div class="col-md-2"><label>Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="country" (change)="getStates('billingAddress')">
+                <select
+                  formControlName="country"
+                  (change)="getStates('billingAddress')"
+                >
                   <option *ngFor="let country of countries" [ngValue]="country">
                     {{ country.name }}
                   </option>
@@ -161,7 +183,7 @@
             <div class="col-md-2"><label>State</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="state" >
+                <select formControlName="state">
                   <option
                     *ngFor="let state of billingAddressStates"
                     [ngValue]="state"

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Luv2ShopFormService } from '../../services/luv2-shop-form.service';
 import { Country } from '../../common/country';
 import { State } from '../../common/state';
@@ -30,9 +35,18 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        email: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+        firstName: new FormControl('', [
+          Validators.required,
+          Validators.minLength(2),
+        ]),
+        lastName: new FormControl('', [
+          Validators.required,
+          Validators.minLength(2),
+        ]),
+        email: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+        ]),
       }),
       shippingAddress: this.formBuilder.group({
         street: [''],
@@ -69,20 +83,26 @@ export class CheckoutComponent implements OnInit {
       });
 
     // populate credit card years
-    this.luv2ShopFormService
-      .getCreditCardYears()
-      .subscribe(data => {
-        console.log('Retrieved credit card years: ' + JSON.stringify(data));
-        this.creditCardYears = data;
-      });
+    this.luv2ShopFormService.getCreditCardYears().subscribe((data) => {
+      console.log('Retrieved credit card years: ' + JSON.stringify(data));
+      this.creditCardYears = data;
+    });
 
     // populate countries
-    this.luv2ShopFormService
-      .getCountries()
-      .subscribe(data => {
-        console.log('Retrieved countries: ' + JSON.stringify(data));
-        this.countries = data;
-      });
+    this.luv2ShopFormService.getCountries().subscribe((data) => {
+      console.log('Retrieved countries: ' + JSON.stringify(data));
+      this.countries = data;
+    });
+  }
+
+  get firstName() {
+    return this.checkoutFormGroup.get('customer.firstName');
+  }
+  get lastName() {
+    return this.checkoutFormGroup.get('customer.lastName');
+  }
+  get email() {
+    return this.checkoutFormGroup.get('customer.email');
   }
 
   copyShippingAddressToBillingAddress(event: any) {
@@ -154,16 +174,15 @@ export class CheckoutComponent implements OnInit {
     console.log(
       `formGroupName=${formGroupName}, countryCode=${countryCode}, countryName=${countryName}`
     );
-    this.luv2ShopFormService.getStates(countryCode).subscribe(
-      data => {
-        if (formGroupName === 'shippingAddress') {
-          this.shippingAddressStates = data;
-        } else {
-          this.billingAddressStates = data;
-        }
+    this.luv2ShopFormService.getStates(countryCode).subscribe((data) => {
+      if (formGroupName === 'shippingAddress') {
+        this.shippingAddressStates = data;
+      } else {
+        this.billingAddressStates = data;
+      }
 
-        // select first item by default
-        formGroup?.get('state')?.setValue(data[0]);
+      // select first item by default
+      formGroup?.get('state')?.setValue(data[0]);
     });
   }
 }
