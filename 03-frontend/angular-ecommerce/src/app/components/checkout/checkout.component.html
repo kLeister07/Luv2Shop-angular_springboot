@@ -21,7 +21,7 @@
                   class="alert alert-danger mt-1"
                 >
                   <div>
-                    <div *ngIf="firstName.errors.required || firstName.errors.notOnlyWhitespace">
+                    <div *ngIf="firstName?.errors?.['required']">
                       First Name is required
                     </div>
                     <div *ngIf="firstName?.errors?.['pattern']">
@@ -52,7 +52,7 @@
                 class="alert alert-danger mt-1"
               >
                 <div>
-                  <div *ngIf="lastName.errors.required || lastName.errors.notOnlyWhitespace">
+                  <div *ngIf="lastName?.errors?.['required']">
                     Last Name is required
                   </div>
                   <div *ngIf="lastName?.errors?.['pattern']">
@@ -83,7 +83,7 @@
                   class="alert alert-danger mt-1"
                 >
                   <div>
-                    <div *ngIf="email.errors.required || email.errors.notOnlyWhitespace">
+                    <div *ngIf="email?.errors?.['required']">
                       Email is required
                     </div>
                     <div *ngIf="email?.errors?.['pattern']">
