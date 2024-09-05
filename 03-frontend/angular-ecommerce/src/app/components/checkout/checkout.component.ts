@@ -34,19 +34,24 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
           Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[a-zA-Z]+$')
         ]),
         lastName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[a-zA-Z]+$')
         ]),
         email: new FormControl('', [
           Validators.required,
+          Luv2ShopValidators.notOnlyWhitespace,
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ]),
       }),
@@ -73,6 +78,15 @@ export class CheckoutComponent implements OnInit {
         expirationYear: [''],
       }),
     });
+
+      // Subscribe to valueChanges to capitalize names
+  this.firstName?.valueChanges.subscribe(value => {
+    this.firstName?.setValue(this.capitalizeFirstLetter(value), { emitEvent: false });
+  });
+
+  this.lastName?.valueChanges.subscribe(value => {
+    this.lastName?.setValue(this.capitalizeFirstLetter(value), { emitEvent: false });
+  });
 
     // populate credit card months
     const startMonth: number = new Date().getMonth() + 1;
@@ -192,4 +206,10 @@ export class CheckoutComponent implements OnInit {
       formGroup?.get('state')?.setValue(data[0]);
     });
   }
+
+  capitalizeFirstLetter(value: string): string {
+    if (!value) return value;
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  }
+
 }
