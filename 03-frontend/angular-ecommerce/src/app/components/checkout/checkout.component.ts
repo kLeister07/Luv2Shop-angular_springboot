@@ -51,7 +51,6 @@ export class CheckoutComponent implements OnInit {
         ]),
         email: new FormControl('', [
           Validators.required,
-          Luv2ShopValidators.notOnlyWhitespace,
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ]),
       }),
