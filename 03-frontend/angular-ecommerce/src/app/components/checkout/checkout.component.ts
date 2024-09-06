@@ -40,13 +40,13 @@ export class CheckoutComponent implements OnInit {
           Validators.required,
           Validators.minLength(2),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.pattern('^[a-zA-Z\\s-]+$'),
         ]),
         lastName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.pattern('^[a-zA-Z\\s-]+$'),
         ]),
         email: new FormControl('', [
           Validators.required,
@@ -58,7 +58,7 @@ export class CheckoutComponent implements OnInit {
           Validators.required,
           Validators.minLength(5),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$')
+          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$'),
         ]),
         city: new FormControl('', [
           Validators.required,
@@ -70,8 +70,7 @@ export class CheckoutComponent implements OnInit {
         country: new FormControl('', [Validators.required]),
         zipCode: new FormControl('', [
           Validators.required,
-          Validators.pattern('^\\d{5}(?:-\\d{4})?$')
-
+          Validators.pattern('^\\d{5}(?:-\\d{4})?$'),
         ]),
       }),
       billingAddress: this.formBuilder.group({
@@ -79,7 +78,7 @@ export class CheckoutComponent implements OnInit {
           Validators.required,
           Validators.minLength(5),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$')
+          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$'),
         ]),
         city: new FormControl('', [
           Validators.required,
@@ -95,24 +94,65 @@ export class CheckoutComponent implements OnInit {
         ]),
       }),
       creditCard: this.formBuilder.group({
-        cardType: [''],
-        nameOnCard: [''],
-        cardNumber: [''],
-        securityCode: [''],
+        cardType: new FormControl('', [Validators.required]),
+        nameOnCard: new FormControl('', [
+          Validators.required,
+          Validators.minLength(2),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[a-zA-Z\\s-]+$'),
+        ]),
+        cardNumber: new FormControl('', [
+          Validators.required,
+          Validators.pattern('[0-9]{16}'),
+        ]),
+        securityCode: new FormControl('', [
+          Validators.required,
+          Validators.pattern('[0-9]{3}'),
+        ]),
         expirationMonth: [''],
         expirationYear: [''],
       }),
     });
 
-    // Subscribe to valueChanges to capitalize names
+    // Subscribe to valueChanges to capitalize words in the form fields
     this.firstName?.valueChanges.subscribe((value) => {
-      this.firstName?.setValue(this.capitalizeFirstLetter(value), {
+      this.firstName?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
     this.lastName?.valueChanges.subscribe((value) => {
-      this.lastName?.setValue(this.capitalizeFirstLetter(value), {
+      this.lastName?.setValue(this.capitalizeWords(value), {
+        emitEvent: false,
+      });
+    });
+
+    this.creditCardNameOnCard?.valueChanges.subscribe((value) => {
+      this.creditCardNameOnCard?.setValue(this.capitalizeWords(value), {
+        emitEvent: false,
+      });
+    });
+
+    this.shippingAddressStreet?.valueChanges.subscribe((value) => {
+      this.shippingAddressStreet?.setValue(this.capitalizeWords(value), {
+        emitEvent: false,
+      });
+    });
+
+    this.shippingAddressCity?.valueChanges.subscribe((value) => {
+      this.shippingAddressCity?.setValue(this.capitalizeWords(value), {
+        emitEvent: false,
+      });
+    });
+
+    this.billingAddressStreet?.valueChanges.subscribe((value) => {
+      this.billingAddressStreet?.setValue(this.capitalizeWords(value), {
+        emitEvent: false,
+      });
+    });
+
+    this.billingAddressCity?.valueChanges.subscribe((value) => {
+      this.billingAddressCity?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
@@ -146,21 +186,54 @@ export class CheckoutComponent implements OnInit {
   get lastName() {
     return this.checkoutFormGroup?.get('customer.lastName');
   }
-  get email() {return this.checkoutFormGroup?.get('customer.email');}
+  get email() {
+    return this.checkoutFormGroup?.get('customer.email');
+  }
 
-  get shippingAddressStreet() {return this.checkoutFormGroup?.get('shippingAddress.street');}
-  get shippingAddressCity() {return this.checkoutFormGroup?.get('shippingAddress.city');}
-  get shippingAddressState() {return this.checkoutFormGroup?.get('shippingAddress.state');}
-  get shippingAddressCountry() {return this.checkoutFormGroup?.get('shippingAddress.country');}
-  get shippingAddressZipCode() {return this.checkoutFormGroup?.get('shippingAddress.zipCode');}
+  get shippingAddressStreet() {
+    return this.checkoutFormGroup?.get('shippingAddress.street');
+  }
+  get shippingAddressCity() {
+    return this.checkoutFormGroup?.get('shippingAddress.city');
+  }
+  get shippingAddressState() {
+    return this.checkoutFormGroup?.get('shippingAddress.state');
+  }
+  get shippingAddressCountry() {
+    return this.checkoutFormGroup?.get('shippingAddress.country');
+  }
+  get shippingAddressZipCode() {
+    return this.checkoutFormGroup?.get('shippingAddress.zipCode');
+  }
 
-  get billingAddressStreet() {return this.checkoutFormGroup?.get('billingAddress.street');}
-  get billingAddressCity() {return this.checkoutFormGroup?.get('billingAddress.city');}
-  get billingAddressState() {return this.checkoutFormGroup?.get('billingAddress.state');}
-  get billingAddressCountry() {return this.checkoutFormGroup?.get('billingAddress.country');}
-  get billingAddressZipCode() {return this.checkoutFormGroup?.get('billingAddress.zipCode');}
+  get billingAddressStreet() {
+    return this.checkoutFormGroup?.get('billingAddress.street');
+  }
+  get billingAddressCity() {
+    return this.checkoutFormGroup?.get('billingAddress.city');
+  }
+  get billingAddressState() {
+    return this.checkoutFormGroup?.get('billingAddress.state');
+  }
+  get billingAddressCountry() {
+    return this.checkoutFormGroup?.get('billingAddress.country');
+  }
+  get billingAddressZipCode() {
+    return this.checkoutFormGroup?.get('billingAddress.zipCode');
+  }
 
-
+  get creditCardType() {
+    return this.checkoutFormGroup?.get('creditCard.creditCardType');
+  }
+  get creditCardNameOnCard() {
+    return this.checkoutFormGroup?.get('creditCard.nameOnCard');
+  }
+  get creditCardNumber() {
+    return this.checkoutFormGroup?.get('creditCard.cardNumber');
+  }
+  get creditCardSecurityCode() {
+    return this.checkoutFormGroup?.get('creditCard.securityCode');
+  }
 
   copyShippingAddressToBillingAddress(event: any) {
     if (event.target.checked) {
@@ -249,9 +322,19 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  capitalizeFirstLetter(value: string): string {
+  capitalizeWords(value: string): string {
     if (!value) return value;
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+    // Use a regular expression to match words separated by spaces or hyphens
+    return value
+      .split(/(\s|-)/) // Split by spaces or hyphens but keep them in the array
+      .map((word) => {
+        // If the word is a separator, return it as-is
+        if (word === ' ' || word === '-') return word;
+        // Otherwise, capitalize the word
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(''); // Join back together without additional spaces
   }
 
   scrollToTop() {
