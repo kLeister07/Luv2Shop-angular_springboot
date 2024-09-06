@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -35,20 +34,19 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[a-zA-Z]+$')
+          Validators.pattern('^[a-zA-Z]+$'),
         ]),
         lastName: new FormControl('', [
           Validators.required,
           Validators.minLength(2),
           Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[a-zA-Z]+$')
+          Validators.pattern('^[a-zA-Z]+$'),
         ]),
         email: new FormControl('', [
           Validators.required,
@@ -56,18 +54,45 @@ export class CheckoutComponent implements OnInit {
         ]),
       }),
       shippingAddress: this.formBuilder.group({
-        street: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        zipCode: [''],
+        street: new FormControl('', [
+          Validators.required,
+          Validators.minLength(5),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$')
+        ]),
+        city: new FormControl('', [
+          Validators.required,
+          Validators.minLength(5),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[A-Za-z\\s-]+$'),
+        ]),
+        state: new FormControl('', [Validators.required]),
+        country: new FormControl('', [Validators.required]),
+        zipCode: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^\\d{5}(?:-\\d{4})?$')
+
+        ]),
       }),
       billingAddress: this.formBuilder.group({
-        street: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        zipCode: [''],
+        street: new FormControl('', [
+          Validators.required,
+          Validators.minLength(5),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[\\dA-Za-z\\s.,\\-#]+$')
+        ]),
+        city: new FormControl('', [
+          Validators.required,
+          Validators.minLength(2),
+          Luv2ShopValidators.notOnlyWhitespace,
+          Validators.pattern('^[A-Za-z\\s-]+$'),
+        ]),
+        state: new FormControl('', [Validators.required]),
+        country: new FormControl('', [Validators.required]),
+        zipCode: new FormControl('', [
+          Validators.required,
+          Validators.pattern('^\\d{5}(?:-\\d{4})?$'),
+        ]),
       }),
       creditCard: this.formBuilder.group({
         cardType: [''],
@@ -79,14 +104,18 @@ export class CheckoutComponent implements OnInit {
       }),
     });
 
-      // Subscribe to valueChanges to capitalize names
-  this.firstName?.valueChanges.subscribe(value => {
-    this.firstName?.setValue(this.capitalizeFirstLetter(value), { emitEvent: false });
-  });
+    // Subscribe to valueChanges to capitalize names
+    this.firstName?.valueChanges.subscribe((value) => {
+      this.firstName?.setValue(this.capitalizeFirstLetter(value), {
+        emitEvent: false,
+      });
+    });
 
-  this.lastName?.valueChanges.subscribe(value => {
-    this.lastName?.setValue(this.capitalizeFirstLetter(value), { emitEvent: false });
-  });
+    this.lastName?.valueChanges.subscribe((value) => {
+      this.lastName?.setValue(this.capitalizeFirstLetter(value), {
+        emitEvent: false,
+      });
+    });
 
     // populate credit card months
     const startMonth: number = new Date().getMonth() + 1;
@@ -117,9 +146,21 @@ export class CheckoutComponent implements OnInit {
   get lastName() {
     return this.checkoutFormGroup?.get('customer.lastName');
   }
-  get email() {
-    return this.checkoutFormGroup?.get('customer.email');
-  }
+  get email() {return this.checkoutFormGroup?.get('customer.email');}
+
+  get shippingAddressStreet() {return this.checkoutFormGroup?.get('shippingAddress.street');}
+  get shippingAddressCity() {return this.checkoutFormGroup?.get('shippingAddress.city');}
+  get shippingAddressState() {return this.checkoutFormGroup?.get('shippingAddress.state');}
+  get shippingAddressCountry() {return this.checkoutFormGroup?.get('shippingAddress.country');}
+  get shippingAddressZipCode() {return this.checkoutFormGroup?.get('shippingAddress.zipCode');}
+
+  get billingAddressStreet() {return this.checkoutFormGroup?.get('billingAddress.street');}
+  get billingAddressCity() {return this.checkoutFormGroup?.get('billingAddress.city');}
+  get billingAddressState() {return this.checkoutFormGroup?.get('billingAddress.state');}
+  get billingAddressCountry() {return this.checkoutFormGroup?.get('billingAddress.country');}
+  get billingAddressZipCode() {return this.checkoutFormGroup?.get('billingAddress.zipCode');}
+
+
 
   copyShippingAddressToBillingAddress(event: any) {
     if (event.target.checked) {
@@ -216,5 +257,4 @@ export class CheckoutComponent implements OnInit {
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
 }
