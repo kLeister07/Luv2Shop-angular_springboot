@@ -51,11 +51,11 @@ public class Order {
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shipping_address_id", referencedColumnJoinName = "id")
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
     private Address shippingAddress;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "billing_address_id", referencedColumnJoinName = "id")
+    @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
     public void addOrderItem(OrderItem item) {
