@@ -1,7 +1,7 @@
 export class Address {
-  street: string | undefined;
-  city: string | undefined;
-  state: string | undefined;
-  country: string | undefined;
-  zipCode: string | undefined;
+  street!: string;
+  city!: string;
+  state!: string;
+  country!: string;
+  zipCode!: string;
 }

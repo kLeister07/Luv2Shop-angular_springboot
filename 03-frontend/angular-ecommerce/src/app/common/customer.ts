@@ -1,4 +1,4 @@
 export class Customer {
-totalQuantity: number | undefined;
-totalPrice: number | undefined;
+totalQuantity!: number;
+totalPrice!: number;
 }
