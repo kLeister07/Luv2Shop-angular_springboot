@@ -58,7 +58,7 @@ public class Order {
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
-    public void addOrderItem(OrderItem item) {
+    public void add(OrderItem item) {
         if (item != null) {
             if (orderItems == null) {
                 orderItems = new HashSet<>();
@@ -68,4 +68,6 @@ public class Order {
         }
     }
 
-}
+    }
+
+
