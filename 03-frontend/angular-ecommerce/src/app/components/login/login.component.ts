@@ -8,10 +8,9 @@ import { log } from 'console';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-
   oktaSignin: any;
 
   constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {
@@ -23,19 +22,18 @@ export class LoginComponent implements OnInit {
       authParams: {
         pkce: true,
         issuer: myAppConfig.oidc.issuer,
-        scopes: myAppConfig.oidc.scopes
-      }
-    })
-
+        scopes: myAppConfig.oidc.scopes,
+      },
+    });
   }
-
 
   ngOnInit(): void {
     this.oktaSignin.remove();
 
-    this.oktaSignin.renderEl({
-      el: '#okta-sign-in-widget' // this name should be same as the div tag id in login.component.html
-    },
+    this.oktaSignin.renderEl(
+      {
+        el: '#okta-sign-in-widget', // this name should be same as the div tag id in login.component.html
+      },
       (response: any) => {
         if (response.status === 'SUCCESS') {
           this.oktaAuth.signInWithRedirect();
@@ -46,5 +44,4 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-
 }
