@@ -3,7 +3,6 @@ import myAppConfig from '../../config/my-app-config';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import OktaSignIn from '@okta/okta-signin-widget';
-import { log } from 'console';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +23,7 @@ export class LoginComponent implements OnInit {
         issuer: myAppConfig.oidc.issuer,
         scopes: myAppConfig.oidc.scopes,
       },
+      useClassicEngine: true,
     });
   }
 
@@ -45,3 +45,43 @@ export class LoginComponent implements OnInit {
     );
   }
 }
+
+
+// ngOnInit(): void {
+//   // Ensure this code only runs in the browser environment
+//   if (typeof window !== 'undefined') {
+//     import('@okta/okta-signin-widget').then(module => {
+//       const OktaSignIn = module.default;
+//       this.oktaSignin = new OktaSignIn({
+//         logo: 'assets/images/logo.png',
+//         baseUrl: myAppConfig.oidc.issuer.split('/oauth2')[0],
+//         clientId: myAppConfig.oidc.clientId,
+//         redirectUri: myAppConfig.oidc.redirectUri,
+//         authParams: {
+//           pkce: true,
+//           issuer: myAppConfig.oidc.issuer,
+//           scopes: myAppConfig.oidc.scopes,
+//         },
+//       });
+
+//       this.oktaSignin.remove();
+
+//       this.oktaSignin.renderEl(
+//         {
+//           el: '#okta-sign-in-widget', // this name should be same as the div tag id in login.component.html
+//         },
+//         (response: any) => {
+//           if (response.status === 'SUCCESS') {
+//             this.oktaAuth.signInWithRedirect();
+//           }
+//         },
+//         (error: any) => {
+//           throw error;
+//         }
+//       );
+//     }).catch(err => {
+//       console.error('Error loading OktaSignIn:', err);
+//     });
+//   }
+// }
+// }
