@@ -1,4 +1,4 @@
-import { Inject, NgModule } from '@angular/core';
+import { Inject, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
@@ -24,8 +24,7 @@ import {
 import { OktaAuth } from '@okta/okta-auth-js';
 import myAppConfig from './config/my-app-config';
 import { MembersPageComponent } from './components/members-page/members-page.component';
-import { on } from 'events';
-import { send } from 'process';
+
 
 const oktaConfig = myAppConfig.oidc;
 
