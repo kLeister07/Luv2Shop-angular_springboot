@@ -2,18 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OrderHistory } from '../common/order-history';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderHistoryService {
+  private orderUrl = environment.luv2shopApiUrl + '/orders';
 
-  private orderUrl = 'http://localhost:8080/api/orders';
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   getOrderHistory(theEmail: string): Observable<GetResponseOrderHistory> {
-
     // need to build URL based on the customer email
     const orderHistoryUrl = `${this.orderUrl}/search/findByCustomerEmailOrderByDateCreatedDesc?email=${theEmail}`;
 
@@ -24,5 +23,5 @@ export class OrderHistoryService {
 interface GetResponseOrderHistory {
   _embedded: {
     orders: OrderHistory[];
-  }
+  };
 }
