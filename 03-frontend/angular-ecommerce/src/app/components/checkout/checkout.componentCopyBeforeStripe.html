@@ -423,18 +423,166 @@
           </div>
         </div>
 
-        <!-- Stripe Elements Credit Card Section -->
+        <!-- credit card form group -->
         <div formGroupName="creditCard" class="form-area">
+          <h3>Credit Card</h3>
 
-          <h3>Credit or Debit Card</h3>
+          <!-- card type -->
+          <div class="row">
+            <div class="col-md-2"><label>Card Type</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="cardType">
+                  <option value="">Select Card Type</option>
+                  <option value="VISA">VISA</option>
+                  <option value="MASTERCARD">MASTERCARD</option>
+                  <option value="AMERICAN_EXPRESS">AMERICAN EXPRESS</option>
+                </select>
 
-          <div id="card-element">
-            <!-- A Stripe Element will be inserted here. -->
+                <div
+                  *ngIf="
+                    creditCardType?.invalid &&
+                    (creditCardType?.dirty || creditCardType?.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div>
+                    <div *ngIf="creditCardType?.errors?.['required']">
+                      Credit Card Type Is Required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Used to display form errors. -->
-          <div id="card-errors" class="displayError.textContent!=='': 'alert alert-danger mt-1'"></div>
+          <!-- name on card -->
+          <div class="row">
+            <div class="col-md-2"><label>Name on Card</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input
+                  formControlName="nameOnCard"
+                  type="text"
+                  placeholder="Enter Name on Card"
+                />
+                <div
+                  *ngIf="
+                    creditCardNameOnCard?.invalid &&
+                    (creditCardNameOnCard?.dirty ||
+                      creditCardNameOnCard?.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div>
+                    <div
+                      *ngIf="creditCardNameOnCard?.errors?.['required'] || creditCardNameOnCard?.errors?.['notOnlyWhitespace']"
+                    >
+                      Name is required
+                    </div>
+                    <div *ngIf="creditCardNameOnCard?.errors?.['pattern']">
+                      Name must contain only letters
+                    </div>
+                    <div *ngIf="creditCardNameOnCard?.errors?.['minlength']">
+                      Name must be at least 2 characters long
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- card number -->
+          <div class="row">
+            <div class="col-md-2"><label>Card Number</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input
+                  formControlName="cardNumber"
+                  type="text"
+                  maxlength="16"
+                  placeholder="Enter Your Card Number"
+                />
+
+                <div
+                  *ngIf="
+                    creditCardNumber?.invalid &&
+                    (creditCardNumber?.dirty || creditCardNumber?.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="creditCardNumber?.errors?.['required']">
+                    Name is required
+                  </div>
+                  <div *ngIf="creditCardNumber?.errors?.['pattern']">
+                    Must be a valid credit card number
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- expiration year -->
+          <div class="row">
+            <div class="col-md-2"><label>Expiration Year</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select
+                  formControlName="expirationYear"
+                  (change)="handleMonthsAndYears()"
+                >
+                  <option *ngFor="let year of creditCardYears" [value]="year">
+                    {{ year }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- expiration month -->
+          <div class="row">
+            <div class="col-md-2"><label>Expiration Month</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="expirationMonth">
+                  <option *ngFor="let month of creditCardMonths">
+                    {{ month }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- security code -->
+          <div class="row">
+            <div class="col-md-2"><label>Security Code</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input
+                  formControlName="securityCode"
+                  type="text"
+                  maxlength="3"
+                  placeholder="Enter Your Security Code"
+                />
+
+                <div
+                  *ngIf="
+                    creditCardSecurityCode?.invalid &&
+                    (creditCardSecurityCode?.dirty ||
+                      creditCardSecurityCode?.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="creditCardSecurityCode?.errors?.['required']">
+                    Security Code is required
+                  </div>
+                  <div *ngIf="creditCardSecurityCode?.errors?.['pattern']">
+                    Must be a valid code number
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Order details -->
