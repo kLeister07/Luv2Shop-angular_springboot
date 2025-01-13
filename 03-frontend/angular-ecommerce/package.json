@@ -26,6 +26,7 @@
     "@okta/okta-angular": "^6.4.0",
     "@okta/okta-auth-js": "^7.8.0",
     "@okta/okta-signin-widget": "^7.23.0",
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "express": "^4.21.0",
     "jquery": "^3.7.1",
