@@ -15,6 +15,9 @@ import { Router } from '@angular/router';
 import { OrderItem } from '../../common/order-item';
 import { Order } from '../../common/order';
 import { Purchase } from '../../common/purchase';
+import e from 'express';
+import { environment } from '../../../environments/environment';
+import { PaymentInfo } from '../../common/payment-info';
 
 @Component({
   selector: 'app-checkout',
@@ -36,6 +39,13 @@ export class CheckoutComponent implements OnInit {
 
   storage: Storage = sessionStorage;
 
+  // initialize Stripe API
+  stripe = Stripe(environment.stripePublishableKey);
+
+  paymentInfo: PaymentInfo = new PaymentInfo();
+  cardElement: any;
+  displayError: any = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private luv2ShopFormService: Luv2ShopFormService,
@@ -45,6 +55,9 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    // setup Stripe payment form
+    this.setupStripePaymentForm();
 
 this.reviewCartDetails();
 
@@ -111,84 +124,84 @@ this.reviewCartDetails();
         ]),
       }),
       creditCard: this.formBuilder.group({
-        cardType: new FormControl('', [Validators.required]),
-        nameOnCard: new FormControl('', [
-          Validators.required,
-          Validators.minLength(2),
-          Luv2ShopValidators.notOnlyWhitespace,
-          Validators.pattern('^[a-zA-Z\\s-]+$'),
-        ]),
-        cardNumber: new FormControl('', [
-          Validators.required,
-          Validators.pattern('[0-9]{16}'),
-        ]),
-        securityCode: new FormControl('', [
-          Validators.required,
-          Validators.pattern('[0-9]{3}'),
-        ]),
-        expirationMonth: [''],
-        expirationYear: [''],
+        // cardType: new FormControl('', [Validators.required]),
+        // nameOnCard: new FormControl('', [
+        //   Validators.required,
+        //   Validators.minLength(2),
+        //   Luv2ShopValidators.notOnlyWhitespace,
+        //   Validators.pattern('^[a-zA-Z\\s-]+$'),
+        // ]),
+        // cardNumber: new FormControl('', [
+        //   Validators.required,
+        //   Validators.pattern('[0-9]{16}'),
+        // ]),
+        // securityCode: new FormControl('', [
+        //   Validators.required,
+        //   Validators.pattern('[0-9]{3}'),
+        // ]),
+        // expirationMonth: [''],
+        // expirationYear: [''],
       }),
     });
 
     // Subscribe to valueChanges to capitalize words in the form fields
-    this.firstName?.valueChanges.subscribe((value) => {
+    this.firstName?.valueChanges.subscribe((value: string) => {
       this.firstName?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.lastName?.valueChanges.subscribe((value) => {
+    this.lastName?.valueChanges.subscribe((value: string) => {
       this.lastName?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.creditCardNameOnCard?.valueChanges.subscribe((value) => {
+    this.creditCardNameOnCard?.valueChanges.subscribe((value: string) => {
       this.creditCardNameOnCard?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.shippingAddressStreet?.valueChanges.subscribe((value) => {
+    this.shippingAddressStreet?.valueChanges.subscribe((value: string) => {
       this.shippingAddressStreet?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.shippingAddressCity?.valueChanges.subscribe((value) => {
+    this.shippingAddressCity?.valueChanges.subscribe((value: string) => {
       this.shippingAddressCity?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.billingAddressStreet?.valueChanges.subscribe((value) => {
+    this.billingAddressStreet?.valueChanges.subscribe((value: string) => {
       this.billingAddressStreet?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    this.billingAddressCity?.valueChanges.subscribe((value) => {
+    this.billingAddressCity?.valueChanges.subscribe((value: string) => {
       this.billingAddressCity?.setValue(this.capitalizeWords(value), {
         emitEvent: false,
       });
     });
 
-    // populate credit card months
-    const startMonth: number = new Date().getMonth() + 1;
-    console.log('startMonth: ' + startMonth);
-    this.luv2ShopFormService
-      .getCreditCardMonths(startMonth)
-      .subscribe((data: any) => {
-        console.log('Credit card months: ' + JSON.stringify(data));
-        this.creditCardMonths = data;
-      });
+    // // populate credit card months
+    // const startMonth: number = new Date().getMonth() + 1;
+    // console.log('startMonth: ' + startMonth);
+    // this.luv2ShopFormService
+    //   .getCreditCardMonths(startMonth)
+    //   .subscribe((data: any) => {
+    //     console.log('Credit card months: ' + JSON.stringify(data));
+    //     this.creditCardMonths = data;
+    //   });
 
-    // populate credit card years
-    this.luv2ShopFormService.getCreditCardYears().subscribe((data: any) => {
-      console.log('Retrieved credit card years: ' + JSON.stringify(data));
-      this.creditCardYears = data;
-    });
+    // // populate credit card years
+    // this.luv2ShopFormService.getCreditCardYears().subscribe((data: any) => {
+    //   console.log('Retrieved credit card years: ' + JSON.stringify(data));
+    //   this.creditCardYears = data;
+    // });
 
     // populate countries
     this.luv2ShopFormService.getCountries().subscribe((data: any) => {
@@ -196,14 +209,38 @@ this.reviewCartDetails();
       this.countries = data;
     });
   }
+  setupStripePaymentForm() {
+    // get a handle to stripe elements
+    var elements = this.stripe.elements();
+
+    // Create a card element... and hide the postal code field
+    this.cardElement = elements.create('card', {hidePostalCode: true});
+
+    // add an instance of card UI component into the 'card-element' div
+    this.cardElement.mount('#card-element');
+
+    // add event bindings for the 'change' event on the card element
+    this.cardElement.on('change', (event: any) => {
+      // get a handle to card-errors element
+      const displayError = document.getElementById('card-errors');
+
+      if (event.complete) {
+        displayError!.textContent = '';
+      } else if (event.error) {
+        // show validation error to the customer
+        this.displayError.textContent = event.error.message;
+      }
+    });
+  }
+
   reviewCartDetails() {
     // subscribe to cartService.totalQuantity
-    this.cartService.totalQuantity.subscribe((totalQuantity) => {
+    this.cartService.totalQuantity.subscribe((totalQuantity: number) => {
       this.totalQuantity = totalQuantity;
     });
 
     // subscribe to cartService.totalPrice
-    this.cartService.totalPrice.subscribe((totalPrice) => {
+    this.cartService.totalPrice.subscribe((totalPrice: number) => {
       this.totalPrice = totalPrice;
     });
   }
@@ -329,13 +366,13 @@ this.reviewCartDetails();
 
     // call REST API via the CheckoutService
     this.checkOutService.placeOrder(purchase).subscribe({
-      next: (response) => {
+      next: (response: { orderTrackingNumber: any; }) => {
         alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
 
         // reset cart
         this.resetCart();
       },
-      error: (err) => {
+      error: (err: { message: any; }) => {
         alert(`There was an error: ${err.message}`);
       },
     });
