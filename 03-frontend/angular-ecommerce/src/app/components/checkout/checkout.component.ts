@@ -364,20 +364,52 @@ this.reviewCartDetails();
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    // call REST API via the CheckoutService
-    this.checkOutService.placeOrder(purchase).subscribe({
-      next: (response: { orderTrackingNumber: any; }) => {
-        alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
+    // compute payment info
+    this.paymentInfo.amount = this.totalPrice * 100;
 
-        // reset cart
-        this.resetCart();
-      },
-      error: (err: { message: any; }) => {
-        alert(`There was an error: ${err.message}`);
-      },
-    });
+    // if valid form then
+    // -create payment intent
+    // -confirm card payment
+    // -place order
+
+    if (!this.checkoutFormGroup.invalid && this.displayError.textContent === '') {
+      this.checkOutService.createPaymentIntent(this.paymentInfo).subscribe(
+        (paymentIntentResponse) => {
+          this.stripe.confirmCardPayment(paymentIntentResponse.client_secret,
+            {
+              payment_method: {
+                card: this.cardElement
+              }
+            }, {handleActions: false})
+            .then((result: any) => {
+              if (result.error) {
+                // inform the customer that there was an error with the payment
+                alert(`There was an error with your payment: ${result.error.message}`);
+              } else {
+                // call the REST API via the CheckoutService
+                this.checkOutService.placeOrder(purchase).subscribe({
+                  next: (response: any) => {
+                    alert(`Your order has been received.\nOrder tracking number: ${response.orderTrackingNumber}`);
+
+                    // reset cart
+                    this.resetCart();
+                  },
+                  error: (error: any) => {
+                    alert(`There was an error: ${error.message}`);
+                  }
+                })
+              }
+            })
+        }
+      )
+    } else {
+      this.checkoutFormGroup.markAllAsTouched();
+      this.scrollToTop(); // Scroll to the top if the form is invalid
+      return;
+    }
 
   }
+
   resetCart() {
     // reset cart data
     this.cartService.cartItems = [];
