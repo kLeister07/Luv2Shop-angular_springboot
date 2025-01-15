@@ -352,16 +352,26 @@ export class CheckoutComponent implements OnInit {
     purchase.customer = this.checkoutFormGroup.controls['customer'].value;
 
     // populate purchase - shipping address
-    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
-    const shippingState: State = JSON.parse(JSON.stringify(purchase?.shippingAddress?.state));
-    const shippingCountry: Country = JSON.parse(JSON.stringify(purchase?.shippingAddress?.country));
+    purchase.shippingAddress =
+      this.checkoutFormGroup.controls['shippingAddress'].value;
+    const shippingState: State = JSON.parse(
+      JSON.stringify(purchase?.shippingAddress?.state)
+    );
+    const shippingCountry: Country = JSON.parse(
+      JSON.stringify(purchase?.shippingAddress?.country)
+    );
     purchase.shippingAddress.state = shippingState.name;
     purchase.shippingAddress.country = shippingCountry.name;
 
     // populate purchase - billing address
-    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
-    const billingState: State = JSON.parse(JSON.stringify(purchase?.billingAddress?.state));
-    const billingCountry: Country = JSON.parse(JSON.stringify(purchase?.billingAddress?.country));
+    purchase.billingAddress =
+      this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingState: State = JSON.parse(
+      JSON.stringify(purchase?.billingAddress?.state)
+    );
+    const billingCountry: Country = JSON.parse(
+      JSON.stringify(purchase?.billingAddress?.country)
+    );
     purchase.billingAddress.state = billingState.name;
     purchase.billingAddress.country = billingCountry.name;
 
@@ -370,8 +380,11 @@ export class CheckoutComponent implements OnInit {
     purchase.orderItems = orderItems;
 
     // compute payment info
-    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = 'USD';
+
+    // log purchase to the console for debugging
+    console.log(`this.paymentInfo.amount: ${this.paymentInfo.amount}`);
 
     // if valid form then
     // - create payment intent
@@ -428,6 +441,7 @@ export class CheckoutComponent implements OnInit {
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
     this.cartService.totalQuantity.next(0);
+    this.cartService.persistCartItems();
 
     // reset the form
     this.checkoutFormGroup.reset();
