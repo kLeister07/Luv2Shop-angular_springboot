@@ -425,7 +425,6 @@
 
         <!-- Stripe Elements Credit Card Section -->
         <div formGroupName="creditCard" class="form-area">
-
           <h3>Credit or Debit Card</h3>
 
           <div id="card-element">
@@ -433,8 +432,10 @@
           </div>
 
           <!-- Used to display form errors. -->
-          <div id="card-errors" class="displayError.textContent!=='': 'alert alert-danger mt-1'"></div>
-
+          <div
+            id="card-errors"
+            class="displayError.textContent!=='': 'alert alert-danger mt-1'"
+          ></div>
         </div>
 
         <!-- Order details -->
@@ -447,7 +448,9 @@
 
         <!-- submit button -->
         <div class="text-center">
-          <button class="btn btn-info" type="submit">Place Order</button>
+          <button class="btn btn-info" [disabled]="isDisabled" type="submit">
+            Place Order
+          </button>
         </div>
       </form>
     </div>
