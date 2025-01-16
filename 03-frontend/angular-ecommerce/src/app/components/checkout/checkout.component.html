@@ -427,6 +427,19 @@
         <div formGroupName="creditCard" class="form-area">
           <h3>Credit or Debit Card</h3>
 
+          <div class="test-payment-info alert alert-info mb-3">
+            <h4>Test Payment Information</h4>
+            <p>
+              Use the following test card details to simulate a payment:
+            </p>
+            <ul>
+              <li><strong>Card Number:</strong> 4242 4242 4242 4242</li>
+              <li><strong>Expiration Date:</strong> Any future date (e.g., 12/34)</li>
+              <li><strong>CVC:</strong> Any 3 digits (e.g., 123)</li>
+            </ul>
+            <p>Note: This is a simulated transaction, and no real payment will be processed.</p>
+          </div>
+
           <div id="card-element">
             <!-- A Stripe Element will be inserted here. -->
           </div>
@@ -445,6 +458,7 @@
           <p>Shipping: FREE</p>
           <p>Total Price: {{ totalPrice | currency : "USD" }}</p>
         </div>
+
 
         <!-- submit button -->
         <div class="text-center">
