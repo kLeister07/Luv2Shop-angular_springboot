@@ -20,7 +20,12 @@
               "detect-node",
               "tiny-emitter",
               "p-cancelable",
-              "cross-fetch"
+              "cross-fetch",
+              "clipboard",
+              "jquery",
+              "@sindresorhus/to-milliseconds",
+              "parse-ms",
+              "q"
             ],
             "outputPath": "dist/angular-ecommerce",
             "index": "src/index.html",
@@ -43,8 +48,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
