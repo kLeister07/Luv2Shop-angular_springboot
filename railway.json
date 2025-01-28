@@ -1,3 +1,5 @@
 {
-    "root": "02-backend/spring-boot-ecommerce"
-  }
+  "rootDirectory": "02-backend/spring-boot-ecommerce",
+  "build": "./mvnw clean package -DskipTests",
+  "start": "java -jar target/spring-boot-ecommerce-0.0.1-SNAPSHOT.jar"
+}
