@@ -27,7 +27,7 @@
               "parse-ms",
               "q"
             ],
-            "outputPath": "dist/angular-ecommerce",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
